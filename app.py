@@ -222,7 +222,7 @@ with aba_selecionada[2]:
     with col1:
         modelo = st.selectbox(
             "Escolha o modelo societário:",
-            ["LTDA + Vesting", "Controladora + SPE", "Nova Sociedade Única"]
+            ["LTDA + Vesting", "Controladora + SPE", "Nova Sociedade Única", "S.A."]
         )
 
         num_devs = st.slider(
@@ -263,6 +263,10 @@ with aba_selecionada[2]:
         aporte = st.number_input(
             "Valor do aporte do investidor (R$)",
             value=500_000
+        )
+        custo_anual_Sa = st.number_input(
+            "Custo anual da estrutura S.A. (R$)",
+            value=1100_000
         )
 
 
@@ -319,22 +323,57 @@ with aba_selecionada[2]:
     atratividade = limitar(atratividade)
     custo = limitar(custo)
 
-    # ROI estimado
-    premio_governanca = aporte * 0.15
-    roi_sa = ((premio_governanca - custo_sa_anual) / custo_sa_anual) * 100
+    # =============================================================
+ # CÁLCULO DE ROI AVANÇADO (FISCAL + JURÍDICO + GOVERNANÇA)
+    # =============================================================
+    
+    # 1. Ganho Fiscal (Lei do Bem) - Aprox. 20.4% da folha anual de P&D
+    custo_folha_anual = (num_devs * overall_average_salary) * 13.3
+    if lei_do_bem == "Sim":
+        ganho_fiscal_anual = custo_folha_anual * 0.204
+    else:
+        ganho_fiscal_anual = 0
+
+    # 2. Ganho de Mitigação de Risco (Processos evitados)
+    # Estimativa de evitar um passivo trabalhista médio de R$ 150k
+    if modelo == "Controladora + SPE":
+        ganho_seguranca = 150000 * 0.80  # 80% de redução de risco
+    else:
+        ganho_seguranca = 150000 * 0.20  # LTDA protege pouco
+
+    # 3. Prêmio de Governança (Equity)
+    if investidor == "Sim":
+        premio_gov = aporte * 0.15
+    else:
+        premio_gov = 0
+
+    # ROI Global
+    ganho_total = ganho_fiscal_anual + ganho_seguranca + premio_gov
+    # Define custo de manutenção com base na seleção (LTDA é mais barata que SPE/S.A.)
+    custo_operacional = custo_anual_Sa if modelo != "LTDA + Vesting" else 5000
+    
+    divisor = custo_operacional if custo_operacional > 0 else 1
+    roi_global = ((ganho_total - custo_operacional) / divisor) * 100
 
     # ===============================
     # Exibição dos resultados
     # ===============================
     st.subheader("Resultados da Simulação")
-    col1, col2, col3, col4, col5 = st.columns(5)
-    col1.metric("Risco Jurídico", risco_juridico)
-    col2.metric("Risco Trabalhista", risco_trabalhista)
-    col3.metric("Risco Fiscal", risco_fiscal)
-    col4.metric("Custo Estrutural", custo)
-    col5.metric("Atratividade Investidor", atratividade)
+    
+    # Métricas de Risco (1 a 5)
+    m1, m2, m3, m4, m5 = st.columns(5)
+    m1.metric("Risco Jurídico", limitar(risco_juridico))
+    m2.metric("Risco Trabalhista", limitar(risco_trabalhista))
+    m3.metric("Risco Fiscal", limitar(risco_fiscal))
+    m4.metric("Custo Estrutural", limitar(custo))
+    m5.metric("Atratividade", limitar(atratividade))
 
-    st.metric("ROI da Estrutura S.A.", f"{roi_sa:.1f}%")
+    # Métricas Financeiras
+    st.markdown("---")
+    f1, f2, f3 = st.columns(3)
+    f1.metric("Economia Fiscal (Ano)", f"R$ {ganho_fiscal_anual:,.2f}")
+    f2.metric("Mitigação de Passivo", f"R$ {ganho_seguranca:,.2f}")
+    f3.metric("ROI Global do Modelo", f"{roi_global:.1f}%")
 
     # ===============================
     # Interpretação jurídica automática
@@ -342,51 +381,27 @@ with aba_selecionada[2]:
     st.subheader("Análise Jurídica Automática")
 
     if modelo == "LTDA + Vesting" and risco_trabalhista >= 4:
-        st.warning("""
-        Estrutura vulnerável a requalificação trabalhista.
-        Recomenda-se vínculo formal ou SPE.
-        """)
+        st.warning("⚠️ **Alerta:** Estrutura vulnerável a requalificação trabalhista. Recomenda-se vínculo formal ou SPE.")
 
     if investidor == "Sim" and atratividade <= 2:
-        st.error("""
-        Estrutura pouco atrativa para investidores institucionais.
-        Possível exigência de reorganização societária futura.
-        """)
+        st.error("❌ **Alerta:** Estrutura pouco atrativa para investidores institucionais. Risco de exigência de 'Flip' ou reorganização cara.")
 
     if lei_do_bem == "Sim":
-        st.success("""
-        Estrutura compatível com incentivos da Lei nº 11.196/2005,
-        desde que adotado Lucro Real e compliance técnico-contábil.
-        """)
-
+        st.success("✅ **Oportunidade:** Estrutura compatível com incentivos da Lei nº 11.196/2005 via Lucro Real.")
+   
     # ===============================
     # Recomendação final
     # ===============================
     st.subheader("Recomendação Final")
     if modelo == "Controladora + SPE":
-        st.markdown("""
-        ✅ **Modelo juridicamente mais robusto**
-        - Ativo tecnológico central
-        - Múltiplos desenvolvedores
-        - Expectativa de investimento
-        - Isolamento de riscos de IP e trabalhistas
-        """)
+        st.info("💡 **Modelo Recomendado:** Garante o isolamento do IP (Ativo Intelectual) e reduz o risco de confusão patrimonial com os desenvolvedores.")
     else:
-        st.markdown("""
-        ⚠️ **Modelo viável, porém com riscos**
-        - Poucos desenvolvedores
-        - Vesting limitado
-        - Forte amarração contratual
-        - Baixa expectativa de investimento externo
-        """)
+        st.write("Considere a migração para SPE caso o número de desenvolvedores ultrapasse 5 ou o aporte supere R$ 500k.")
 
 # --- 3. CUSTOS ---
 with aba_selecionada[3]:
     st.subheader("Análise de Custos de Manutenção")
-    st.markdown("### Comparativo de Valores Reais (Estimados)")
     st.dataframe(tabela_manutencao_financeira.applymap(color_ball), use_container_width=True)
-    
-    st.markdown("### Resumo de Esforço por Modelo")
     st.dataframe(tabela_custos_base.applymap(color_ball), use_container_width=True)
 
 # --- 4. RISCOS LEGAIS ---
@@ -397,16 +412,11 @@ with aba_selecionada[4]:
 # --- 5. TRIBUTAÇÃO / BENEFÍCIOS ---
 with aba_selecionada[5]:
     st.subheader("Benefícios Legais e Fiscais")
-    st.markdown("### Tributação Detalhada")
-    st.dataframe(tabela_tributacao_detalhada.applymap(color_ball), use_container_width=True)
-    
     st.markdown("### Lei do Bem (P&D)")
     st.dataframe(tabela_lei_bem.applymap(color_ball), use_container_width=True)
-    
     st.markdown("### Marco Legal das Startups (LC 182/21)")
     st.dataframe(tabela_lc182.applymap(color_ball), use_container_width=True)
-    
-    st.markdown("### Comparativo de Regimes de Incentivo")
+    st.markdown("### Comparativo de Regimes")
     st.dataframe(tabela_inova.applymap(color_ball), use_container_width=True)
 
 # --- 6. S.A. ---
@@ -417,18 +427,10 @@ with aba_selecionada[6]:
 # --- 7. CONCLUSÃO JURÍDICA ---
 with aba_selecionada[7]:
     st.subheader("Parecer de Implementação")
-    st.success("Recomendação: Iniciar com LTDA + Contratos de Vesting. Migrar para S.A. apenas na rodada Seed/Series A.")
+    st.success("Recomendação: Iniciar com LTDA + Contratos de Vesting. Migrar para SPE/S.A. apenas na rodada Seed/Series A para otimizar custos iniciais.")
+
 # --- 8. PESQUISA SALARIAL DEV ---
 with aba_selecionada[8]:
     st.subheader("Pesquisa Salarial de Programadores 2025")
-    st.markdown("### Média Salarial por Nível")
     st.dataframe(salary_df, use_container_width=True)
-
-    st.markdown("### Distribuição de Programadores por Nível")
-    st.dataframe(programmer_distribution_df, use_container_width=True)
-
-    st.markdown("### Distribuição por Área de Atuação")
-    st.dataframe(area_distribution_df, use_container_width=True)
-
-    st.markdown(f"**Salário Médio Geral Ponderado:** R$ {overall_average_s0alary:,.2f}")
-
+    st.markdown(f"**Salário Médio Geral Ponderado:** R$ {overall_average_salary:,.2f}")
