@@ -39,6 +39,26 @@ def color_ball(val):
     else:
         return val
 
+
+
+def parse_and_fill_salaries(salaries_str, num_devs_for_level, average_salary):
+    parsed_salaries = []
+    if salaries_str:
+        raw_salaries = salaries_str.replace(' ', '').replace('.', '').replace(',', '.').split(',')
+        for s in raw_salaries:
+            try:
+                parsed_salaries.append(float(s))
+            except ValueError:
+                # Ignore non-numeric values
+                continue
+
+    # Fill with average salary if not enough custom salaries
+    while len(parsed_salaries) < num_devs_for_level:
+        parsed_salaries.append(average_salary)
+
+    # Trim if too many custom salaries
+    return parsed_salaries[:num_devs_for_level]
+
 # ===============================
 # DADOS BASE (TODOS OS ORIGINAIS + NOVOS)
 # ===============================
@@ -414,5 +434,5 @@ with aba_selecionada[8]:
     st.markdown("### Distribuição por Área de Atuação")
     st.dataframe(area_distribution_df, use_container_width=True)
 
-    st.markdown(f"**Salário Médio Geral Ponderado:** R$ {overall_average_salary:,.2f}")
+    st.markdown(f"**Salário Médio Geral Ponderado:** R$ {overall_average_s0alary:,.2f}")
 
