@@ -62,6 +62,14 @@ def parse_and_fill_salaries(salaries_str, num_devs_for_level, average_salary):
 # ===============================
 # DADOS BASE (TODOS OS ORIGINAIS + NOVOS)
 # ===============================
+
+# FORMA CORRETA: Aplica a função diretamente no DataFrame
+st.dataframe(
+    tabela_modelos.applymap(color_ball), 
+    use_container_width=True,
+    height=500
+)
+
 df_modelos = pd.DataFrame({
     "Modelo": ["LTDA + Vesting", "Controladora + SPE", "Nova Sociedade Única"],
     "Custo Inicial": ["Baixo", "Alto", "Alto"],
