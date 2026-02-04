@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
 
 
 # ===============================
@@ -39,6 +40,10 @@ def color_ball(val):
     else:
         return val
 
+
+def limitar(valor):
+    """Função para limitar valores entre 1 e 5"""
+    return max(1, min(valor, 5))
 
 
 def parse_and_fill_salaries(salaries_str, num_devs_for_level, average_salary):
@@ -166,7 +171,8 @@ tabela_sa = pd.DataFrame({
     "Controladora + SPE": ["Alto","Alto","Médio/Alto","Alto","Médio","Médio","Alto","Médio"],
     "S.A.": ["Muito Alto","Muito Alto","Alto","Alto","Baixo","Baixo","Muito Alto","Baixo"]
 })
-# DADOS DA PESQUISA SALARIAL (NOVOS)
+
+# DADOS DA PESQUISA SALARIAL
 salary_df = pd.DataFrame([('Estágio', 1743.4), ('Júnior', 4154.21), ('Pleno', 7840.74), ('Sênior', 15635.35), ('Outro (Especialista, Tech Lead, Principal)', 19290.08)], columns=['Level', 'Average Salary (R$)'])
 programmer_distribution_df = pd.DataFrame([('Pleno', 33.75), ('Sênior', 24.92), ('Júnior', 24.47), ('Outro (Especialista, Tech Lead, Principal)', 11.76), ('Estágio', 5.1)], columns=['Level', 'Percentage (%)'])
 area_distribution_df = pd.DataFrame([('Full-Stack', 37.42), ('Back-End', 30.06), ('Front-End', 9.06), ('Dados (BI, Data Science)', 5.45), ('Mobile', 5.4)], columns=['Area', 'Percentage (%)'])
@@ -190,7 +196,7 @@ aba_selecionada = st.tabs(abas)
 # --- 0. DASHBOARD GERAL ---
 with aba_selecionada[0]:
     st.subheader("Comparação Geral dos Modelos Societários")
-    st.dataframe(df_modelos.applymap(color_ball), use_container_width=True)
+    st.dataframe(df_modelos.map(color_ball), use_container_width=True)
 
 ## --- 1. DEFINIÇÕES GERAIS ---
 with aba_selecionada[1]:
@@ -225,12 +231,6 @@ with aba_selecionada[1]:
 
     st.markdown("---")
     
-    # Infográfico de Fluxo de Operação (Conceitual)
-    st.subheader("🔄 Fluxo de Valor e Estrutura")
-    
-    
-    st.markdown("---")
-    
     # Tabela Comparativa com Explicação
     st.subheader("📊 Matriz Comparativa de Modelos")
     st.info("""
@@ -240,13 +240,13 @@ with aba_selecionada[1]:
     
     # Exibição da Tabela Detalhada
     st.dataframe(
-        tabela_modelos.style.applymap(color_ball), 
+        tabela_modelos.style.map(color_ball), 
         use_container_width=True,
-        height=500 # Aumentado para evitar scroll excessivo em tabelas longas
+        height=500
     )
     
     st.markdown("""
-    > **Nota Técnica:** Os critérios de **Risco Trabalhista** e **Tributário** > consideram a jurisprudência atual do TST e CARF sobre contratos de Vesting e Stock Options.
+    > **Nota Técnica:** Os critérios de **Risco Trabalhista** e **Tributário** consideram a jurisprudência atual do TST e CARF sobre contratos de Vesting e Stock Options.
     """)
 
 # --- 2. SIMULAÇÃO & ROI INTERATIVO ---
@@ -312,7 +312,6 @@ with aba_selecionada[2]:
             value=1100_000
         )
 
-
     # ===============================
     # Cálculo dinâmico de métricas
     # ===============================
@@ -356,19 +355,16 @@ with aba_selecionada[2]:
         custo += 1
         atratividade += 1
 
-    # Limites entre 1 e 5
-    def limitar(valor):
-        return max(1, min(valor, 5))
-
+    # Aplicar limites
     risco_juridico = limitar(risco_juridico)
     risco_trabalhista = limitar(risco_trabalhista)
     risco_fiscal = limitar(risco_fiscal)
     atratividade = limitar(atratividade)
     custo = limitar(custo)
 
-    # =============================================================
- # CÁLCULO DE ROI AVANÇADO (FISCAL + JURÍDICO + GOVERNANÇA)
-    # =============================================================
+    # ===================================================================
+    # CÁLCULO DE ROI AVANÇADO (FISCAL + JURÍDICO + GOVERNANÇA)
+    # ===================================================================
     
     # 1. Ganho Fiscal (Lei do Bem) - Aprox. 20.4% da folha anual de P&D
     custo_folha_anual = (num_devs * overall_average_salary) * 13.3
@@ -444,35 +440,34 @@ with aba_selecionada[2]:
 # --- 3. CUSTOS ---
 with aba_selecionada[3]:
     st.subheader("Análise de Custos de Manutenção")
-    st.dataframe(tabela_manutencao_financeira.applymap(color_ball), use_container_width=True)
-    st.dataframe(tabela_custos_base.applymap(color_ball), use_container_width=True)
+    st.dataframe(tabela_manutencao_financeira.map(color_ball), use_container_width=True)
+    st.dataframe(tabela_custos_base.map(color_ball), use_container_width=True)
 
 # --- 4. RISCOS LEGAIS ---
 with aba_selecionada[4]:
     st.subheader("Matriz de Riscos")
-    st.dataframe(tabela_riscos_legais.applymap(color_ball), use_container_width=True)
+    st.dataframe(tabela_riscos_legais.map(color_ball), use_container_width=True)
 
 # --- 5. TRIBUTAÇÃO / BENEFÍCIOS ---
 with aba_selecionada[5]:
     
     st.markdown("### Tributação Detalhada")
-    st.dataframe(tabela_tributacao_detalhada.applymap(color_ball), use_container_width=True)
+    st.dataframe(tabela_tributacao_detalhada.map(color_ball), use_container_width=True)
 
     st.subheader("Benefícios Legais e Fiscais")
     st.markdown("### Lei do Bem (P&D)")
-    st.dataframe(tabela_lei_bem.applymap(color_ball), use_container_width=True)
+    st.dataframe(tabela_lei_bem.map(color_ball), use_container_width=True)
     st.markdown("### Marco Legal das Startups (LC 182/21)")
-    st.dataframe(tabela_lc182.applymap(color_ball), use_container_width=True)
+    st.dataframe(tabela_lc182.map(color_ball), use_container_width=True)
     st.markdown("### Comparativo de Regimes")
-    st.dataframe(tabela_inova.applymap(color_ball), use_container_width=True)
+    st.dataframe(tabela_inova.map(color_ball), use_container_width=True)
 
 # --- 6. S.A. ---
 with aba_selecionada[6]:
     st.subheader("Aprofundamento: Sociedade Anônima")
-    st.dataframe(tabela_sa.applymap(color_ball), use_container_width=True)
+    st.dataframe(tabela_sa.map(color_ball), use_container_width=True)
 
 # --- 7. CONCLUSÃO JURÍDICA ---
-# --- 7. CONCLUSÃO JURÍDICA (Parecer Consultivo Dinâmico) ---
 with aba_selecionada[7]:
     st.header("⚖️ Parecer Técnico de Implementação")
     
@@ -499,7 +494,7 @@ with aba_selecionada[7]:
         3. **Compliance:** Exige contabilidade rigorosa para evitar a desconsideração da personalidade jurídica.
         """)
     
-    else: # Nova Sociedade Única
+    else:  # Nova Sociedade Única
         st.warning("### Estratégia: Reorganização de Cap Table")
         st.markdown("""
         **Diagnóstico:** Modelo de transição complexa. Exige cuidado com a sucessão de obrigações da empresa antiga.
@@ -520,8 +515,6 @@ with aba_selecionada[7]:
         "Foco Jurídico": ["Proteção de IP", "Atratividade para Anjos", "Governança e IPO Readiness"]
     }
     st.table(pd.DataFrame(roadmap_data))
-
-    
 
     # Checklist de Próximos Passos
     st.subheader("📋 Próximos Passos Imediatos")
@@ -553,5 +546,3 @@ with aba_selecionada[8]:
     st.dataframe(area_distribution_df, use_container_width=True)
 
     st.markdown(f"**Salário Médio Geral Ponderado:** R$ {overall_average_salary:,.2f}")
-
-
