@@ -114,8 +114,8 @@ for col in tabela_riscos_display.columns:
     if col != "Tipo de risco":
         tabela_riscos_display[col] = tabela_riscos_display[col].apply(color_ball)
 
-aba_selecionada = st.tabs()
-with aba_selecionada[0]:
+with st.expander("Ver tabela completa de modelos societários"):
+    st.header("📊 Matriz Comparativa de Modelos")
     tabela_modelos_completa = pd.DataFrame({
         "Critério": [
             "Estrutura",
@@ -153,6 +153,7 @@ with aba_selecionada[0]:
             "Médio (entrada futura de sócio)",
             "Vesting mal redigido",
             "Médio",
+            "Médio",
             "Boa",
             "Sim (fase inicial)"
         ],
@@ -171,6 +172,7 @@ with aba_selecionada[0]:
             "Médio",
             "Alto (conflitos SPE/IP)",
             "Transferência de IP",
+            "Média",
             "Alto",
             "Muito boa",
             "Sim"
@@ -190,6 +192,7 @@ with aba_selecionada[0]:
             "Médio",
             "Alto (conflitos diretos)",
             "Cap table pulverizado",
+            "Baixa",
             "Muito alto",
             "Ruim",
             "Não recomendado"
