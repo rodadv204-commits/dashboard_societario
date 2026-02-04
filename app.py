@@ -191,20 +191,62 @@ with aba_selecionada[0]:
     st.subheader("Comparação Geral dos Modelos Societários")
     st.dataframe(df_modelos.applymap(color_ball), use_container_width=True)
 
-# --- 1. DEFINIÇÕES GERAIS ---
+## --- 1. DEFINIÇÕES GERAIS ---
 with aba_selecionada[1]:
-    st.subheader("1. Visão Geral")
-    st.markdown("""
-**1.1 Visão Geral**  
-A TattooPop é uma startup que digitaliza e profissionaliza o mercado de tatuagem no Brasil.  
+    st.header("📖 Sumário Executivo e Teses Jurídicas")
+    
+    # Seção de Visão de Negócio com Cards
+    col_negocio, col_juridico = st.columns([1, 1])
+    
+    with col_negocio:
+        st.subheader("🚀 O Negócio: TattooPop")
+        st.markdown("""
+        A **TattooPop** opera como um ecossistema digital para o mercado de *body art*, 
+        focada em desintermediar a relação entre artistas e clientes via tecnologia.
+        
+        **Pilares de Valor:**
+        * **SaaS B2B:** Gestão completa para tatuadores (finanças e CRM).
+        * **Marketplace B2C:** Experiência de agendamento para o usuário final.
+        * **IP-Centric:** O valor da empresa reside no software e na base de dados.
+        """)
+    
+    with col_juridico:
+        st.subheader("⚖️ Teses Societárias")
+        st.markdown("""
+        O desafio jurídico reside em equilibrar a **retenção de talentos (DEVs)** com a **proteção da Propriedade Intelectual (IP)**, preparando a casa 
+        para rodadas de investimento (Angel/Seed).
+        
+        **Premissas Adotadas:**
+        * Mitigação de risco trabalhista em contratos de Vesting.
+        * Eficiência tributária via enquadramento estratégico.
+        * Segurança contratual para fundadores e minoritários.
+        """)
 
-**Funcionalidades básicas:**  
-- Aplicação SaaS para artistas (assinatura, sem comissão por trabalho)  
-- Agenda, finanças, CRM e portfólio centralizados  
-- Aplicação mobile para clientes finais  
-""")
-    st.subheader("Tabela Comparativa Detalhada")
-    st.dataframe(tabela_modelos.applymap(color_ball), use_container_width=True)
+    st.markdown("---")
+    
+    # Infográfico de Fluxo de Operação (Conceitual)
+    st.subheader("🔄 Fluxo de Valor e Estrutura")
+    
+    
+    st.markdown("---")
+    
+    # Tabela Comparativa com Explicação
+    st.subheader("📊 Matriz Comparativa de Modelos")
+    st.info("""
+    A tabela abaixo cruza **18 critérios técnicos** para determinar qual estrutura 
+    suporta melhor o crescimento da TattooPop sem gerar passivos ocultos.
+    """)
+    
+    # Exibição da Tabela Detalhada
+    st.dataframe(
+        tabela_modelos.style.applymap(color_ball), 
+        use_container_width=True,
+        height=500 # Aumentado para evitar scroll excessivo em tabelas longas
+    )
+    
+    st.markdown("""
+    > **Nota Técnica:** Os critérios de **Risco Trabalhista** e **Tributário** > consideram a jurisprudência atual do TST e CARF sobre contratos de Vesting e Stock Options.
+    """)
 
 # --- 2. SIMULAÇÃO & ROI INTERATIVO ---
 with aba_selecionada[2]:
