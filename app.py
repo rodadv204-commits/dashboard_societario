@@ -18,7 +18,7 @@ dos modelos societários para startups brasileiras.
 """)
 
 # ===============================
-# FUNÇÃO PARA COLORIR COM BOLINHA
+# FUNÇÃO PARA COLORIR COM BOLINHA (sem .style.map)
 # ===============================
 def color_ball(val):
     if isinstance(val, str):
@@ -196,7 +196,7 @@ aba_selecionada = st.tabs(abas)
 # --- 0. DASHBOARD GERAL ---
 with aba_selecionada[0]:
     st.subheader("Comparação Geral dos Modelos Societários")
-    st.dataframe(df_modelos.map(color_ball), use_container_width=True)
+    st.dataframe(df_modelos.applymap(color_ball), use_container_width=True)
 
 ## --- 1. DEFINIÇÕES GERAIS ---
 with aba_selecionada[1]:
@@ -238,9 +238,9 @@ with aba_selecionada[1]:
     suporta melhor o crescimento da TattooPop sem gerar passivos ocultos.
     """)
     
-    # Exibição da Tabela Detalhada
+    # Exibição da Tabela Detalhada (sem .style.map)
     st.dataframe(
-        tabela_modelos.style.map(color_ball), 
+        tabela_modelos.applymap(color_ball), 
         use_container_width=True,
         height=500
     )
@@ -440,32 +440,32 @@ with aba_selecionada[2]:
 # --- 3. CUSTOS ---
 with aba_selecionada[3]:
     st.subheader("Análise de Custos de Manutenção")
-    st.dataframe(tabela_manutencao_financeira.map(color_ball), use_container_width=True)
-    st.dataframe(tabela_custos_base.map(color_ball), use_container_width=True)
+    st.dataframe(tabela_manutencao_financeira.applymap(color_ball), use_container_width=True)
+    st.dataframe(tabela_custos_base.applymap(color_ball), use_container_width=True)
 
 # --- 4. RISCOS LEGAIS ---
 with aba_selecionada[4]:
     st.subheader("Matriz de Riscos")
-    st.dataframe(tabela_riscos_legais.map(color_ball), use_container_width=True)
+    st.dataframe(tabela_riscos_legais.applymap(color_ball), use_container_width=True)
 
 # --- 5. TRIBUTAÇÃO / BENEFÍCIOS ---
 with aba_selecionada[5]:
     
     st.markdown("### Tributação Detalhada")
-    st.dataframe(tabela_tributacao_detalhada.map(color_ball), use_container_width=True)
+    st.dataframe(tabela_tributacao_detalhada.applymap(color_ball), use_container_width=True)
 
     st.subheader("Benefícios Legais e Fiscais")
     st.markdown("### Lei do Bem (P&D)")
-    st.dataframe(tabela_lei_bem.map(color_ball), use_container_width=True)
+    st.dataframe(tabela_lei_bem.applymap(color_ball), use_container_width=True)
     st.markdown("### Marco Legal das Startups (LC 182/21)")
-    st.dataframe(tabela_lc182.map(color_ball), use_container_width=True)
+    st.dataframe(tabela_lc182.applymap(color_ball), use_container_width=True)
     st.markdown("### Comparativo de Regimes")
-    st.dataframe(tabela_inova.map(color_ball), use_container_width=True)
+    st.dataframe(tabela_inova.applymap(color_ball), use_container_width=True)
 
 # --- 6. S.A. ---
 with aba_selecionada[6]:
     st.subheader("Aprofundamento: Sociedade Anônima")
-    st.dataframe(tabela_sa.map(color_ball), use_container_width=True)
+    st.dataframe(tabela_sa.applymap(color_ball), use_container_width=True)
 
 # --- 7. CONCLUSÃO JURÍDICA ---
 with aba_selecionada[7]:
