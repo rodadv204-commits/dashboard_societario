@@ -299,14 +299,6 @@ else:
         if modelo in tabela_filtrada.columns:
             column_cfg[modelo] = st.column_config.TextColumn(width="medium")
 
-    st.dataframe(
-        tabela_filtrada,
-        use_container_width=True,
-        column_config=column_cfg,
-        hide_index=True,
-        height=500
-    )
-
 
     for modelo in filtro_modelo:
         if modelo in tabela_filtrada.columns:
