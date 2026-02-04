@@ -429,9 +429,73 @@ with aba_selecionada[6]:
     st.dataframe(tabela_sa.applymap(color_ball), use_container_width=True)
 
 # --- 7. CONCLUSÃO JURÍDICA ---
+# --- 7. CONCLUSÃO JURÍDICA (Parecer Consultivo Dinâmico) ---
 with aba_selecionada[7]:
-    st.subheader("Parecer de Implementação")
-    st.success("Recomendação: Iniciar com LTDA + Contratos de Vesting. Migrar para SPE/S.A. apenas na rodada Seed/Series A para otimizar custos iniciais.")
+    st.header("⚖️ Parecer Técnico de Implementação")
+    
+    # Lógica de Recomendação Baseada no Simulador
+    if modelo == "LTDA + Vesting":
+        st.info("### Estratégia: Escala Inicial e Validação")
+        st.markdown("""
+        **Diagnóstico:** Ideal para startups em estágio *Pre-Seed* ou com foco em redução de *burn rate*. 
+        
+        **Recomendações Práticas:**
+        1. **Vesting Preciso:** Utilize cláusulas de *Good Leaver* e *Bad Leaver* para evitar litígios na saída de devs.
+        2. **Propriedade Intelectual (IP):** Insira cláusulas de cessão total e irrevogável de direitos autorais em todos os contratos de prestação de serviços.
+        3. **Risco Trabalhista:** Se o risco for **Alto**, considere formalizar o vínculo CLT para os 'Key Players' ou acelerar a migração para SPE.
+        """)
+        
+    elif modelo == "Controladora + SPE":
+        st.success("### Estratégia: Blindagem de Ativos e Governança Sênior")
+        st.markdown("""
+        **Diagnóstico:** Recomendado para startups com alto valor de IP ou que já possuem rodada de investimento confirmada.
+        
+        **Recomendações Práticas:**
+        1. **Segregação:** Mantenha a operação na SPE e os ativos de software na Controladora (Holding).
+        2. **Acordo de Sócios (SHA):** Essencial para regular a relação entre fundadores e desenvolvedores minoritários.
+        3. **Compliance:** Exige contabilidade rigorosa para evitar a desconsideração da personalidade jurídica.
+        """)
+    
+    else: # Nova Sociedade Única
+        st.warning("### Estratégia: Reorganização de Cap Table")
+        st.markdown("""
+        **Diagnóstico:** Modelo de transição complexa. Exige cuidado com a sucessão de obrigações da empresa antiga.
+        
+        **Recomendações Práticas:**
+        1. **Due Diligence:** Realize auditoria tributária na empresa atual antes de transferir ativos para a nova.
+        2. **Valuation:** Defina o preço das quotas de forma a não gerar tributação por ganho de capital indevido.
+        """)
+
+    st.markdown("---")
+    
+    # Timeline de Evolução Societária
+    st.subheader("📌 Roadmap Societário Sugerido")
+    
+    roadmap_data = {
+        "Fase": ["Validação (MVP)", "Tração (Early Stage)", "Escala (Growth)"],
+        "Modelo Ideal": ["LTDA + Vesting / Inova Simples", "Controladora + SPE (LTDA)", "S.A. (Lucro Real)"],
+        "Foco Jurídico": ["Proteção de IP", "Atratividade para Anjos", "Governança e IPO Readiness"]
+    }
+    st.table(pd.DataFrame(roadmap_data))
+
+    
+
+    # Checklist de Próximos Passos
+    st.subheader("📋 Próximos Passos Imediatos")
+    
+    st.checkbox("Revisar contratos de Vesting atuais (Minuta Padrão)", value=True)
+    st.checkbox("Verificar enquadramento no Lucro Real para Lei do Bem")
+    
+    if investidor == "Sim":
+        st.checkbox("👉 **Ação Crítica:** Organizar Data Room jurídico para Due Diligence do investidor.")
+    
+    # Botão de Exportação (Simulado)
+    st.download_button(
+        label="Gerar PDF do Parecer (Simulado)",
+        data="Conteúdo do Parecer Gerado pelo Dashboard Societário",
+        file_name="parecer_societario_tattoopop.txt",
+        mime="text/plain"
+    )
 
 # --- 8. PESQUISA SALARIAL DEV ---
 with aba_selecionada[8]:
