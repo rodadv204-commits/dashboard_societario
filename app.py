@@ -432,5 +432,15 @@ with aba_selecionada[7]:
 # --- 8. PESQUISA SALARIAL DEV ---
 with aba_selecionada[8]:
     st.subheader("Pesquisa Salarial de Programadores 2025")
+    st.markdown("### Média Salarial por Nível")
     st.dataframe(salary_df, use_container_width=True)
+
+    st.markdown("### Distribuição de Programadores por Nível")
+    st.dataframe(programmer_distribution_df, use_container_width=True)
+
+    st.markdown("### Distribuição por Área de Atuação")
+    st.dataframe(area_distribution_df, use_container_width=True)
+
     st.markdown(f"**Salário Médio Geral Ponderado:** R$ {overall_average_salary:,.2f}")
+
+
