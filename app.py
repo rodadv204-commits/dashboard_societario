@@ -411,6 +411,10 @@ with aba_selecionada[4]:
 
 # --- 5. TRIBUTAÇÃO / BENEFÍCIOS ---
 with aba_selecionada[5]:
+    
+    st.markdown("### Tributação Detalhada")
+    st.dataframe(tabela_tributacao_detalhada.applymap(color_ball), use_container_width=True)
+
     st.subheader("Benefícios Legais e Fiscais")
     st.markdown("### Lei do Bem (P&D)")
     st.dataframe(tabela_lei_bem.applymap(color_ball), use_container_width=True)
