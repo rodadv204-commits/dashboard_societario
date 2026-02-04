@@ -265,10 +265,6 @@ with aba_selecionada[2]:
             value=500_000
         )
 
-        custo_sa_anual = st.slider(
-            "Custo Extra de Manutenção da S.A. / Ano (R$)",
-            20_000, 100_000, 45_000
-        )
 
     # ===============================
     # Cálculo dinâmico de métricas
