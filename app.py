@@ -285,8 +285,6 @@ with aba_selecionada[0]:
 
     # Garantia de segurança
 
-filtro_modelo = filtro_modelo if isinstance(filtro_modelo, list) else []
-
 if len(filtro_modelo) == 0:
     st.warning("Selecione ao menos um modelo para exibição.")
 
