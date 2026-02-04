@@ -74,6 +74,11 @@ df_modelos = pd.DataFrame({
     "Receita Mínima Recomendada": ["0", "R$ 50.000", "R$ 100.000"]
 })
 
+# Aplicar color_ball ao df_modelos
+df_modelos_display = df_modelos.copy()
+for col in df_modelos_display.columns:
+    df_modelos_display[col] = df_modelos_display[col].apply(color_ball)
+
 tabela_custos_base = pd.DataFrame({
     "Modelo": ["LTDA + Vesting", "Controladora + SPE", "Nova Sociedade Única"],
     "Custo abertura": ["Baixo", "Alto", "Muito Alto"],
@@ -82,11 +87,19 @@ tabela_custos_base = pd.DataFrame({
     "Custo contábil": ["Baixo", "Médio/Alto", "Médio/Alto"]
 })
 
+tabela_custos_base_display = tabela_custos_base.copy()
+for col in tabela_custos_base_display.columns:
+    tabela_custos_base_display[col] = tabela_custos_base_display[col].apply(color_ball)
+
 tabela_manutencao_financeira = pd.DataFrame({
     "Item de Custo": ["Honorários Contábeis (Mensal)", "Taxas Junta Comercial", "Publicações Legais (Anual)", "Certificado Digital (Anual)", "Compliance Societário"],
     "LTDA (Limitada)": ["R$ 350 - R$ 2.000", "R$ 450", "Isento", "R$ 250", "Baixo"],
     "S.A. (Anônima)": ["R$ 2.000 - R$ 10.000", "R$ 1.200", "R$ 5.000+", "R$ 500", "Muito Alto"]
 })
+
+tabela_manutencao_display = tabela_manutencao_financeira.copy()
+for col in tabela_manutencao_display.columns:
+    tabela_manutencao_display[col] = tabela_manutencao_display[col].apply(color_ball)
 
 tabela_riscos_legais = pd.DataFrame({
     "Tipo de risco": ["Trabalhista", "Tributário", "Societário", "Investidor", "Operacional"],
@@ -94,6 +107,10 @@ tabela_riscos_legais = pd.DataFrame({
     "Controladora + SPE": ["Médio","Médio","Alto","Médio","Médio"],
     "Nova Sociedade Única": ["Alto","Médio","Alto","Alto","Alto"]
 })
+
+tabela_riscos_display = tabela_riscos_legais.copy()
+for col in tabela_riscos_display.columns:
+    tabela_riscos_display[col] = tabela_riscos_display[col].apply(color_ball)
 
 tabela_modelos_completa = pd.DataFrame({
     "Critério": [
@@ -122,6 +139,10 @@ tabela_modelos_completa = pd.DataFrame({
     ]
 })
 
+tabela_modelos_display = tabela_modelos_completa.copy()
+for col in tabela_modelos_display.columns:
+    tabela_modelos_display[col] = tabela_modelos_display[col].apply(color_ball)
+
 tabela_tributacao_detalhada = pd.DataFrame({
     "Aspecto": [
         "Custo contábil adicional", "Custo jurídico/consultivo", "Custo compliance",
@@ -133,6 +154,10 @@ tabela_tributacao_detalhada = pd.DataFrame({
     "Impacto Controladora + SPE": ["Médio", "Médio", "Alto", "Alto", "Médio", "Sim", "Sim", "Sim", "Alta", "Alta", "Alta", "Excelente"]
 })
 
+tabela_tributacao_display = tabela_tributacao_detalhada.copy()
+for col in tabela_tributacao_display.columns:
+    tabela_tributacao_display[col] = tabela_tributacao_display[col].apply(color_ball)
+
 tabela_lei_bem = pd.DataFrame({
     "Aspecto": ["Regime tributário exigido", "Custo contábil adicional", "Custo jurídico/consultivo",
                 "Custo compliance", "Benefício financeiro potencial", "Risco fiscal",
@@ -140,12 +165,20 @@ tabela_lei_bem = pd.DataFrame({
     "Impacto": ["Lucro Real", "Alto", "Médio", "Médio", "Alto", "Médio", "Sim", "Excelente", "Boa"]
 })
 
+tabela_lei_bem_display = tabela_lei_bem.copy()
+for col in tabela_lei_bem_display.columns:
+    tabela_lei_bem_display[col] = tabela_lei_bem_display[col].apply(color_ball)
+
 tabela_lc182 = pd.DataFrame({
     "Aspecto": ["Custo direto", "Custo indireto (adequação contratual)", "Redução de risco jurídico",
                 "Facilidade para captação", "Compatibilidade com vesting", "Compatibilidade com SPE",
                 "Atração de investidor-anjo", "Redução de responsabilidade do investidor"],
     "Impacto": ["Nenhum", "Baixo", "Alta", "Alta", "Alta", "Muito alta", "Alta", "Alta"]
 })
+
+tabela_lc182_display = tabela_lc182.copy()
+for col in tabela_lc182_display.columns:
+    tabela_lc182_display[col] = tabela_lc182_display[col].apply(color_ball)
 
 tabela_inova = pd.DataFrame({
     "Critério": ["Natureza", "Estágio ideal", "Regime tributário", "Benefício principal", "Foco",
@@ -160,6 +193,10 @@ tabela_inova = pd.DataFrame({
                   "Investimento e governança", "Não", "Sim", "Sim", "Alta", "✅ com ambos"]
 })
 
+tabela_inova_display = tabela_inova.copy()
+for col in tabela_inova_display.columns:
+    tabela_inova_display[col] = tabela_inova_display[col].apply(color_ball)
+
 tabela_sa = pd.DataFrame({
     "Critério": ["Proteção acionistas", "Complexidade jurídica", "Custo inicial", "Custo mensal",
                  "Risco trabalhista", "Risco tributário", "Governança", "Controle fundadores"],
@@ -167,6 +204,10 @@ tabela_sa = pd.DataFrame({
     "Controladora + SPE": ["Alto","Alto","Médio/Alto","Alto","Médio","Médio","Alto","Médio"],
     "S.A.": ["Muito Alto","Muito Alto","Alto","Alto","Baixo","Baixo","Muito Alto","Baixo"]
 })
+
+tabela_sa_display = tabela_sa.copy()
+for col in tabela_sa_display.columns:
+    tabela_sa_display[col] = tabela_sa_display[col].apply(color_ball)
 
 salary_df = pd.DataFrame([('Estágio', 1743.4), ('Júnior', 4154.21), ('Pleno', 7840.74), ('Sênior', 15635.35), ('Outro (Especialista, Tech Lead, Principal)', 19290.08)], columns=['Level', 'Average Salary (R$)'])
 programmer_distribution_df = pd.DataFrame([('Pleno', 33.75), ('Sênior', 24.92), ('Júnior', 24.47), ('Outro (Especialista, Tech Lead, Principal)', 11.76), ('Estágio', 5.1)], columns=['Level', 'Percentage (%)'])
@@ -190,7 +231,7 @@ aba_selecionada = st.tabs(abas)
 # --- 0. DASHBOARD GERAL ---
 with aba_selecionada[0]:
     st.subheader("Comparação Geral dos Modelos Societários")
-    st.dataframe(df_modelos.applymap(color_ball), use_container_width=True)
+    st.dataframe(df_modelos_display, use_container_width=True)
 
 ## --- 1. DEFINIÇÕES GERAIS ---
 with aba_selecionada[1]:
@@ -230,10 +271,7 @@ with aba_selecionada[1]:
     suporta melhor o crescimento da TattooPop sem gerar passivos ocultos.
     """)
     
-    st.dataframe(
-        tabela_modelos_completa.applymap(color_ball), 
-        use_container_width=True
-    )
+    st.dataframe(tabela_modelos_display, use_container_width=True)
     
     st.markdown("""
     > **Nota Técnica:** Os critérios de **Risco Trabalhista** e **Tributário** consideram a jurisprudência atual do TST e CARF sobre contratos de Vesting e Stock Options.
@@ -249,6 +287,7 @@ with aba_selecionada[2]:
 
     col1, col2 = st.columns(2)
 
+    # Define all input variables in the appropriate scope
     with col1:
         modelo = st.selectbox(
             "Escolha o modelo societário:",
@@ -400,38 +439,62 @@ with aba_selecionada[2]:
 # --- 3. CUSTOS ---
 with aba_selecionada[3]:
     st.subheader("Análise de Custos de Manutenção")
-    st.dataframe(tabela_manutencao_financeira.applymap(color_ball), use_container_width=True)
-    st.dataframe(tabela_custos_base.applymap(color_ball), use_container_width=True)
+    st.dataframe(tabela_manutencao_display, use_container_width=True)
+    st.dataframe(tabela_custos_base_display, use_container_width=True)
 
 # --- 4. RISCOS LEGAIS ---
 with aba_selecionada[4]:
     st.subheader("Matriz de Riscos")
-    st.dataframe(tabela_riscos_legais.applymap(color_ball), use_container_width=True)
+    st.dataframe(tabela_riscos_display, use_container_width=True)
 
 # --- 5. TRIBUTAÇÃO / BENEFÍCIOS ---
 with aba_selecionada[5]:
     
     st.markdown("### Tributação Detalhada")
-    st.dataframe(tabela_tributacao_detalhada.applymap(color_ball), use_container_width=True)
+    st.dataframe(tabela_tributacao_display, use_container_width=True)
 
     st.subheader("Benefícios Legais e Fiscais")
     st.markdown("### Lei do Bem (P&D)")
-    st.dataframe(tabela_lei_bem.applymap(color_ball), use_container_width=True)
+    st.dataframe(tabela_lei_bem_display, use_container_width=True)
     st.markdown("### Marco Legal das Startups (LC 182/21)")
-    st.dataframe(tabela_lc182.applymap(color_ball), use_container_width=True)
+    st.dataframe(tabela_lc182_display, use_container_width=True)
     st.markdown("### Comparativo de Regimes")
-    st.dataframe(tabela_inova.applymap(color_ball), use_container_width=True)
+    st.dataframe(tabela_inova_display, use_container_width=True)
 
 # --- 6. S.A. ---
 with aba_selecionada[6]:
     st.subheader("Aprofundamento: Sociedade Anônima")
-    st.dataframe(tabela_sa.applymap(color_ball), use_container_width=True)
+    st.dataframe(tabela_sa_display, use_container_width=True)
 
 # --- 7. CONCLUSÃO JURÍDICA ---
+def new_func():
+    st.download_button(
+        label="Gerar PDF do Parecer (Simulado)",
+        data="Conteúdo do Parecer Gerado pelo Dashboard Societário",
+        file_name="parecer_societario_tattoopop.txt",
+        mime="text/plain"
+    )
+
 with aba_selecionada[7]:
     st.header("⚖️ Parecer Técnico de Implementação")
     
-    if modelo == "LTDA + Vesting":
+    # Re-declare variables for this tab since they're defined in tab 2
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        modelo_parecer = st.selectbox(
+            "Escolha o modelo societário para parecer:",
+            ["LTDA + Vesting", "Controladora + SPE", "Nova Sociedade Única", "S.A."],
+            key="modelo_parecer"
+        )
+
+        investidor_parecer = st.selectbox(
+            "Há expectativa de investimento externo?",
+            ["Sim", "Não"],
+            key="investidor_parecer"
+        )
+    
+    if modelo_parecer == "LTDA + Vesting":
         st.info("### Estratégia: Escala Inicial e Validação")
         st.markdown("""
         **Diagnóstico:** Ideal para startups em estágio *Pre-Seed* ou com foco em redução de *burn rate*. 
@@ -442,7 +505,7 @@ with aba_selecionada[7]:
         3. **Risco Trabalhista:** Se o risco for **Alto**, considere formalizar o vínculo CLT para os 'Key Players' ou acelerar a migração para SPE.
         """)
         
-    elif modelo == "Controladora + SPE":
+    elif modelo_parecer == "Controladora + SPE":
         st.success("### Estratégia: Blindagem de Ativos e Governança Sênior")
         st.markdown("""
         **Diagnóstico:** Recomendado para startups com alto valor de IP ou que já possuem rodada de investimento confirmada.
@@ -479,15 +542,10 @@ with aba_selecionada[7]:
     st.checkbox("Revisar contratos de Vesting atuais (Minuta Padrão)", value=True)
     st.checkbox("Verificar enquadramento no Lucro Real para Lei do Bem")
     
-    if investidor == "Sim":
+    if investidor_parecer == "Sim":
         st.checkbox("👉 **Ação Crítica:** Organizar Data Room jurídico para Due Diligence do investidor.")
     
-    st.download_button(
-        label="Gerar PDF do Parecer (Simulado)",
-        data="Conteúdo do Parecer Gerado pelo Dashboard Societário",
-        file_name="parecer_societario_tattoopop.txt",
-        mime="text/plain"
-    )
+    new_func()
 
 # --- 8. PESQUISA SALARIAL DEV ---
 with aba_selecionada[8]:
