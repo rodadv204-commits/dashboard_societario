@@ -18,7 +18,7 @@ dos modelos societários para startups brasileiras.
 """)
 
 # ===============================
-# FUNÇÃO PARA COLORIR COM BOLINHA (sem .style.map)
+# FUNÇÃO PARA COLORIR COM BOLINHA
 # ===============================
 def color_ball(val):
     if isinstance(val, str):
@@ -54,18 +54,15 @@ def parse_and_fill_salaries(salaries_str, num_devs_for_level, average_salary):
             try:
                 parsed_salaries.append(float(s))
             except ValueError:
-                # Ignore non-numeric values
                 continue
 
-    # Fill with average salary if not enough custom salaries
     while len(parsed_salaries) < num_devs_for_level:
         parsed_salaries.append(average_salary)
 
-    # Trim if too many custom salaries
     return parsed_salaries[:num_devs_for_level]
 
 # ===============================
-# DADOS BASE (TODOS OS ORIGINAIS + NOVOS)
+# DADOS BASE
 # ===============================
 
 df_modelos = pd.DataFrame({
@@ -85,7 +82,6 @@ tabela_custos_base = pd.DataFrame({
     "Custo contábil": ["Baixo", "Médio/Alto", "Médio/Alto"]
 })
 
-# NOVA: Tabela detalhada de custos reais solicitada
 tabela_manutencao_financeira = pd.DataFrame({
     "Item de Custo": ["Honorários Contábeis (Mensal)", "Taxas Junta Comercial", "Publicações Legais (Anual)", "Certificado Digital (Anual)", "Compliance Societário"],
     "LTDA (Limitada)": ["R$ 350 - R$ 2.000", "R$ 450", "Isento", "R$ 250", "Baixo"],
@@ -99,7 +95,7 @@ tabela_riscos_legais = pd.DataFrame({
     "Nova Sociedade Única": ["Alto","Médio","Alto","Alto","Alto"]
 })
 
-tabela_modelos = pd.DataFrame({
+tabela_modelos_completa = pd.DataFrame({
     "Critério": [
         "Estrutura", "Entrada dos desenvolvedores", "Titularidade do IP", "Prazo de implementação",
         "Complexidade jurídica", "Custo societário inicial", "Custo mensal recorrente",
@@ -172,12 +168,10 @@ tabela_sa = pd.DataFrame({
     "S.A.": ["Muito Alto","Muito Alto","Alto","Alto","Baixo","Baixo","Muito Alto","Baixo"]
 })
 
-# DADOS DA PESQUISA SALARIAL
 salary_df = pd.DataFrame([('Estágio', 1743.4), ('Júnior', 4154.21), ('Pleno', 7840.74), ('Sênior', 15635.35), ('Outro (Especialista, Tech Lead, Principal)', 19290.08)], columns=['Level', 'Average Salary (R$)'])
 programmer_distribution_df = pd.DataFrame([('Pleno', 33.75), ('Sênior', 24.92), ('Júnior', 24.47), ('Outro (Especialista, Tech Lead, Principal)', 11.76), ('Estágio', 5.1)], columns=['Level', 'Percentage (%)'])
 area_distribution_df = pd.DataFrame([('Full-Stack', 37.42), ('Back-End', 30.06), ('Front-End', 9.06), ('Dados (BI, Data Science)', 5.45), ('Mobile', 5.4)], columns=['Area', 'Percentage (%)'])
 
-# Calculate overall average salary
 merged_salary_dist_df = pd.merge(salary_df, programmer_distribution_df, on='Level', how='inner')
 merged_salary_dist_df['Weighted Salary'] = merged_salary_dist_df['Average Salary (R$)'] * (merged_salary_dist_df['Percentage (%)'] / 100)
 overall_average_salary = merged_salary_dist_df['Weighted Salary'].sum()
@@ -202,7 +196,6 @@ with aba_selecionada[0]:
 with aba_selecionada[1]:
     st.header("📖 Sumário Executivo e Teses Jurídicas")
     
-    # Seção de Visão de Negócio com Cards
     col_negocio, col_juridico = st.columns([1, 1])
     
     with col_negocio:
@@ -231,18 +224,15 @@ with aba_selecionada[1]:
 
     st.markdown("---")
     
-    # Tabela Comparativa com Explicação
     st.subheader("📊 Matriz Comparativa de Modelos")
     st.info("""
     A tabela abaixo cruza **18 critérios técnicos** para determinar qual estrutura 
     suporta melhor o crescimento da TattooPop sem gerar passivos ocultos.
     """)
     
-    # Exibição da Tabela Detalhada (sem .style.map)
     st.dataframe(
-        tabela_modelos.applymap(color_ball), 
-        use_container_width=True,
-        height=500
+        tabela_modelos_completa.applymap(color_ball), 
+        use_container_width=True
     )
     
     st.markdown("""
@@ -257,9 +247,6 @@ with aba_selecionada[2]:
     Ajuste os parâmetros abaixo para simular **riscos, custos e atratividade** dos modelos societários.
     """)
 
-    # ===============================
-    # Entradas interativas
-    # ===============================
     col1, col2 = st.columns(2)
 
     with col1:
@@ -312,17 +299,12 @@ with aba_selecionada[2]:
             value=1100_000
         )
 
-    # ===============================
-    # Cálculo dinâmico de métricas
-    # ===============================
-    # Valores iniciais
     risco_juridico = 2
     risco_trabalhista = 2
     risco_fiscal = 2
     atratividade = 3
     custo = 2
 
-    # Ajustes baseados nas entradas
     if num_devs > 5:
         risco_trabalhista += 1
         risco_juridico += 1
@@ -355,51 +337,36 @@ with aba_selecionada[2]:
         custo += 1
         atratividade += 1
 
-    # Aplicar limites
     risco_juridico = limitar(risco_juridico)
     risco_trabalhista = limitar(risco_trabalhista)
     risco_fiscal = limitar(risco_fiscal)
     atratividade = limitar(atratividade)
     custo = limitar(custo)
 
-    # ===================================================================
-    # CÁLCULO DE ROI AVANÇADO (FISCAL + JURÍDICO + GOVERNANÇA)
-    # ===================================================================
-    
-    # 1. Ganho Fiscal (Lei do Bem) - Aprox. 20.4% da folha anual de P&D
     custo_folha_anual = (num_devs * overall_average_salary) * 13.3
     if lei_do_bem == "Sim":
         ganho_fiscal_anual = custo_folha_anual * 0.204
     else:
         ganho_fiscal_anual = 0
 
-    # 2. Ganho de Mitigação de Risco (Processos evitados)
-    # Estimativa de evitar um passivo trabalhista médio de R$ 150k
     if modelo == "Controladora + SPE":
-        ganho_seguranca = 150000 * 0.80  # 80% de redução de risco
+        ganho_seguranca = 150000 * 0.80
     else:
-        ganho_seguranca = 150000 * 0.20  # LTDA protege pouco
+        ganho_seguranca = 150000 * 0.20
 
-    # 3. Prêmio de Governança (Equity)
     if investidor == "Sim":
         premio_gov = aporte * 0.15
     else:
         premio_gov = 0
 
-    # ROI Global
     ganho_total = ganho_fiscal_anual + ganho_seguranca + premio_gov
-    # Define custo de manutenção com base na seleção (LTDA é mais barata que SPE/S.A.)
     custo_operacional = custo_anual_Sa if modelo != "LTDA + Vesting" else 5000
     
     divisor = custo_operacional if custo_operacional > 0 else 1
     roi_global = ((ganho_total - custo_operacional) / divisor) * 100
 
-    # ===============================
-    # Exibição dos resultados
-    # ===============================
     st.subheader("Resultados da Simulação")
     
-    # Métricas de Risco (1 a 5)
     m1, m2, m3, m4, m5 = st.columns(5)
     m1.metric("Risco Jurídico", limitar(risco_juridico))
     m2.metric("Risco Trabalhista", limitar(risco_trabalhista))
@@ -407,16 +374,12 @@ with aba_selecionada[2]:
     m4.metric("Custo Estrutural", limitar(custo))
     m5.metric("Atratividade", limitar(atratividade))
 
-    # Métricas Financeiras
     st.markdown("---")
     f1, f2, f3 = st.columns(3)
     f1.metric("Economia Fiscal (Ano)", f"R$ {ganho_fiscal_anual:,.2f}")
     f2.metric("Mitigação de Passivo", f"R$ {ganho_seguranca:,.2f}")
     f3.metric("ROI Global do Modelo", f"{roi_global:.1f}%")
 
-    # ===============================
-    # Interpretação jurídica automática
-    # ===============================
     st.subheader("Análise Jurídica Automática")
 
     if modelo == "LTDA + Vesting" and risco_trabalhista >= 4:
@@ -428,9 +391,6 @@ with aba_selecionada[2]:
     if lei_do_bem == "Sim":
         st.success("✅ **Oportunidade:** Estrutura compatível com incentivos da Lei nº 11.196/2005 via Lucro Real.")
    
-    # ===============================
-    # Recomendação final
-    # ===============================
     st.subheader("Recomendação Final")
     if modelo == "Controladora + SPE":
         st.info("💡 **Modelo Recomendado:** Garante o isolamento do IP (Ativo Intelectual) e reduz o risco de confusão patrimonial com os desenvolvedores.")
@@ -471,7 +431,6 @@ with aba_selecionada[6]:
 with aba_selecionada[7]:
     st.header("⚖️ Parecer Técnico de Implementação")
     
-    # Lógica de Recomendação Baseada no Simulador
     if modelo == "LTDA + Vesting":
         st.info("### Estratégia: Escala Inicial e Validação")
         st.markdown("""
@@ -494,7 +453,7 @@ with aba_selecionada[7]:
         3. **Compliance:** Exige contabilidade rigorosa para evitar a desconsideração da personalidade jurídica.
         """)
     
-    else:  # Nova Sociedade Única
+    else:
         st.warning("### Estratégia: Reorganização de Cap Table")
         st.markdown("""
         **Diagnóstico:** Modelo de transição complexa. Exige cuidado com a sucessão de obrigações da empresa antiga.
@@ -506,7 +465,6 @@ with aba_selecionada[7]:
 
     st.markdown("---")
     
-    # Timeline de Evolução Societária
     st.subheader("📌 Roadmap Societário Sugerido")
     
     roadmap_data = {
@@ -516,7 +474,6 @@ with aba_selecionada[7]:
     }
     st.table(pd.DataFrame(roadmap_data))
 
-    # Checklist de Próximos Passos
     st.subheader("📋 Próximos Passos Imediatos")
     
     st.checkbox("Revisar contratos de Vesting atuais (Minuta Padrão)", value=True)
@@ -525,7 +482,6 @@ with aba_selecionada[7]:
     if investidor == "Sim":
         st.checkbox("👉 **Ação Crítica:** Organizar Data Room jurídico para Due Diligence do investidor.")
     
-    # Botão de Exportação (Simulado)
     st.download_button(
         label="Gerar PDF do Parecer (Simulado)",
         data="Conteúdo do Parecer Gerado pelo Dashboard Societário",
