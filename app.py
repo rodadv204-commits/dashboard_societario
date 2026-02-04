@@ -114,32 +114,90 @@ for col in tabela_riscos_display.columns:
     if col != "Tipo de risco":
         tabela_riscos_display[col] = tabela_riscos_display[col].apply(color_ball)
 
-tabela_modelos_completa = pd.DataFrame({
-    "Critério": [
-        "Estrutura", "Entrada dos desenvolvedores", "Titularidade do IP", "Prazo de implementação",
-        "Complexidade jurídica", "Custo societário inicial", "Custo mensal recorrente",
-        "Flexibilidade para investidores", "Governança", "Controle dos fundadores",
-        "Risco trabalhista", "Risco tributário", "Risco societário",
-        "Risco para investidor (red flags)", "Facilidade de dissolução", 
-        "Custo de reorganização futura", "Adequação a startup early stage", "Vinculação ao Inova Simples"
-    ],
-    "LTDA + Vesting": [
-        "Uma LTDA existente + contratos", "Posterior, via vesting", "LTDA principal desde o início", "Curto (30–60 dias)",
-        "Média", "Baixo", "Baixo", "Média", "Mais simples", "Alto",
-        "Alto (vesting x vínculo)", "Médio/Alto (requalificação do vesting)", "Médio (entrada futura de sócio)",
-        "Vesting mal redigido", "Alta", "Médio", "Boa", "Sim (fase inicial)"
-    ],
-    "Controladora + SPE": [
-        "LTDA controladora + SPE", "Desde o início na SPE (minoritários)", "Inicialmente da SPE, depois transferido", "Médio (60–120 dias)",
-        "Alta", "Médio/Alto", "Alto (2 CNPJs)", "Alta", "Mais robusta", "Muito alto",
-        "Médio", "Médio", "Alto (conflitos SPE/IP)", "Transferência de IP", "Média", "Alto", "Muito boa", "Sim"
-    ],
-    "Nova Sociedade Única": [
-        "Nova LTDA substituindo a atual", "Desde o início como sócios", "Da nova sociedade", "Longo (90–150 dias)",
-        "Alta", "Médio", "Médio", "Média", "Complexa (muitos sócios)", "Médio",
-        "Alto", "Médio", "Alto (conflitos diretos)", "Cap table pulverizado", "Baixa", "Muito alto", "Ruim", "Não recomendado"
-    ]
-})
+aba_selecionada = st.tabs()
+with aba_selecionada[0]:
+    tabela_modelos_completa = pd.DataFrame({
+        "Critério": [
+            "Estrutura",
+            "Entrada dos desenvolvedores",
+            "Titularidade do IP",
+            "Prazo de implementação",
+            "Complexidade jurídica",
+            "Custo societário inicial",
+            "Custo mensal recorrente",
+            "Flexibilidade para investidores",
+            "Governança",
+            "Controle dos fundadores",
+            "Risco trabalhista",
+            "Risco tributário",
+            "Risco societário",
+            "Risco para investidor (red flags)",
+            "Facilidade de dissolução",
+            "Custo de reorganização futura",
+            "Adequação a startup early stage",
+            "Vinculação ao Inova Simples"
+        ],
+        "LTDA + Vesting": [
+            "Uma LTDA existente + contratos",
+            "Posterior, via vesting",
+            "LTDA principal desde o início",
+            "Curto (30–60 dias)",
+            "Média",
+            "Baixo",
+            "Baixo",
+            "Média",
+            "Mais simples",
+            "Alto",
+            "Alto (vesting x vínculo)",
+            "Médio/Alto (requalificação do vesting)",
+            "Médio (entrada futura de sócio)",
+            "Vesting mal redigido",
+            "Médio",
+            "Boa",
+            "Sim (fase inicial)"
+        ],
+        "Controladora + SPE": [
+            "LTDA controladora + SPE",
+            "Desde o início na SPE (minoritários)",
+            "Inicialmente da SPE, depois transferido",
+            "Médio (60–120 dias)",
+            "Alta",
+            "Médio/Alto",
+            "Alto (2 CNPJs)",
+            "Alta",
+            "Mais robusta",
+            "Muito alto",
+            "Médio",
+            "Médio",
+            "Alto (conflitos SPE/IP)",
+            "Transferência de IP",
+            "Alto",
+            "Muito boa",
+            "Sim"
+        ],
+        "Nova Sociedade Única": [
+            "Nova LTDA substituindo a atual",
+            "Desde o início como sócios",
+            "Da nova sociedade",
+            "Longo (90–150 dias)",
+            "Alta",
+            "Médio",
+            "Médio",
+            "Média",
+            "Complexa (muitos sócios)",
+            "Médio",
+            "Alto",
+            "Médio",
+            "Alto (conflitos diretos)",
+            "Cap table pulverizado",
+            "Muito alto",
+            "Ruim",
+            "Não recomendado"
+        ]
+    })
+
+    st.dataframe(tabela_modelos_completa, use_container_width=True)
+
 
 tabela_modelos_display = tabela_modelos_completa.copy()
 for col in tabela_modelos_display.columns:
@@ -284,6 +342,7 @@ with aba_selecionada[0]:
     tabela_filtrada = tabela_filtrada[colunas] if all(col in tabela_filtrada.columns for col in colunas) else tabela_filtrada
 
     # Garantia de segurança
+
 
 if len(filtro_modelo) == 0:
     st.warning("Selecione ao menos um modelo para exibição.")
